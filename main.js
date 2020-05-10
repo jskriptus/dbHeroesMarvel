@@ -71,10 +71,6 @@ const removeDublicates = (heroes) => {
         return result + ',' + item.movies;
     }, 'undefined').split(',');
 
-    movies.map(item => {
-        return item.trim();
-    })
-
     const notDublicateFilms = [...new Set(movies)];
 
     notDublicateFilms.forEach(item => {
