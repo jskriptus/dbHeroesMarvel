@@ -1,0 +1,23 @@
+
+.main {
+    height: 1000px;
+}
+
+.hero-card {
+    float: left;
+    text-align: center;
+    background-color: antiquewhite;
+    margin: 5px;
+    border-radius: 10%;
+    width: 32%; 
+    height: 500px;
+    align-items: center;
+}
+
+span {
+    display: block;
+}
+
+img {
+    width: 100px;
+}
