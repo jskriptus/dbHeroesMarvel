@@ -3,17 +3,48 @@
 
 // select.addEventListener('change', () => {
 //     fetch('./dbHeroes.json', {
-//         method: 'GET',
-//         mode: 'same-origin'
-//     })
+//             method: 'GET',
+//             mode: 'same-origin'
+//         })
 //         .then((response) => {
 //             if (response.status !== 200) {
 //                 throw new Error('status network not 200');
 //             }
 //             return (response.json());
 //         })
-//         .then((response) => {
-//             console.log(response);
+//         .then((hero) => {
+//             films.forEach((hero) => {
+//                 const heroCard = document.createElement('div');
+//                 heroCard.setAttribute('class', 'hero-card');
+//                 main.insertAdjacentElement('beforeend', heroCard);
+
+//                 const name = hero.name ? hero.name : 'Неизвестно',
+//                     realName = hero.realName ? hero.realName : 'Неизвестно',
+//                     species = hero.species ? hero.species : 'Неизвестно',
+//                     gender = hero.gender ? hero.gender : 'Неизвестно',
+//                     citizenship = hero.citizenship ? hero.citizenship : 'Неизвестно',
+//                     status = hero.status ? hero.status : 'Неизвестно',
+//                     birthDay = hero.birthDay ? hero.birthDay : 'Неизвестно',
+//                     actor = hero.actor ? hero.actor : 'Неизвестно',
+//                     movies = hero.movies ? hero.movies.join('<br>') : 'Нету',
+//                     photo = hero.photo ? hero.photo : 'Нету фотографии';
+
+//                 const heroInfo = `<img src="${photo}" />
+//                                     <h2>Имя: ${name}</h2>
+//                                     <span>Настоящее имя: ${realName}</span>
+//                                     <span>Вид: ${species}</span>
+//                                     <span>Пол: ${gender}</span>
+//                                     <span>Гражданство: ${citizenship}</span>
+//                                     <span>Статус: ${status}</span>
+//                                     <span>День рождения: ${birthDay}</span>
+//                                     <span>Актер: ${actor}</span>
+//                                     <div class='films'>
+//                                         Фильмы: ${movies}
+//                                     </div>
+//                         `;
+
+//                 heroCard.insertAdjacentHTML('beforeend', heroInfo);
+//             });
 //         })
 //         .catch((error) => {
 //             console.error(error);
@@ -59,20 +90,26 @@ fetch('./dbHeroes.json')
     })
     .then(heroes => {
         allHeroes = heroes;
-        removeDublicates(heroes);
+        addMoviesToSelect(heroes);
         renderCard(heroes);
     })
     .catch(error => {
         console.error(error);
     });
 
-const removeDublicates = (heroes) => {
+const addMoviesToSelect = (heroes) => {
+    // Получаем массив со всеми фильмами
     const movies = heroes.reduce((result, item) => {
         return result + ',' + item.movies;
     }, 'undefined').split(',');
 
-    const notDublicateFilms = [...new Set(movies)];
+    // Убираем пробелы в начале и в конце названия фильма
+    const trimMovies = movies.map(i => i.trim());
 
+    // убираем дубликаты фильмов
+    const notDublicateFilms = [...new Set(trimMovies)].sort();
+
+    // Добавляем каждый фильм в option селекта
     notDublicateFilms.forEach(item => {
         if (item !== 'undefined') {
             const option = new Option(item, item);
@@ -88,7 +125,6 @@ const renderCard = (films) => {
         heroCard.setAttribute('class', 'hero-card');
         main.insertAdjacentElement('beforeend', heroCard);
 
-        // const {name, realName, species, gender, citizenship, status, birthDay, actor, movies} = hero;
         const name = hero.name ? hero.name : 'Неизвестно',
             realName = hero.realName ? hero.realName : 'Неизвестно',
             species = hero.species ? hero.species : 'Неизвестно',
